@@ -1,31 +1,29 @@
 name: Build, Tag & Push Docker image
 
-on:
-  workflow_call:
-    inputs:
-      image-name:
-        required: true
-        type: string
-        description: "Name of the Docker image to build and push, obtainable as github.repository"
-      GITHUB_TOKEN:
-        required: true
-        type: string
-        description: "GitHub token for authentication"
-      is-latest:
-        required: false
-        type: boolean
-        default: false
-        description: "Is this a release to latest?"
-      pr-number:
-        required: false
-        type: number
-        default: 0
-        description: "Pull request number for tagging"
-      milestone-number:
-        required: false
-        type: number
-        default: 0
-        description: "Milestone number for tagging"
+inputs:
+  image-name:
+    required: true
+    type: string
+    description: "Name of the Docker image to build and push, obtainable as github.repository"
+  GITHUB_TOKEN:
+    required: true
+    type: string
+    description: "GitHub token for authentication"
+  is-latest:
+    required: false
+    type: boolean
+    default: false
+    description: "Is this a release to latest?"
+  pr-number:
+    required: false
+    type: number
+    default: 0
+    description: "Pull request number for tagging"
+  milestone-number:
+    required: false
+    type: number
+    default: 0
+    description: "Milestone number for tagging"
 
 runs:
   using: "composite"
