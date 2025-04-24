@@ -34,11 +34,11 @@ runs:
     - name: log input
       shell: bash
       run: |
-        echo "image-name: ${{ inputs.image-name }}"
-        # echo "GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}"
-        echo "is-latest: ${{ inputs.is-latest }}"
-        echo "pr-number: ${{ inputs.pr-number }}"
-        echo "milestone-number: ${{ inputs.milestone-number }}"
+        echo "image-name: '${{ inputs.image-name }}'"
+        # echo "GITHUB_TOKEN: '${{ inputs.GITHUB_TOKEN }}'"
+        echo "is-latest: '${{ inputs.is-latest }}'"
+        echo "pr-number: '${{ inputs.pr-number }}'"
+        echo "milestone-number: '${{ inputs.milestone-number }}'"
     - uses: actions/checkout@v4
     - name: Build Docker image
       shell: bash
