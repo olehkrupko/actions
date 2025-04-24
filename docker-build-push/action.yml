@@ -2,22 +2,22 @@ name: Build, Tag & Push Docker image
 
 on:
   workflow_call:
-    # inputs:
-    #   image-name:
-    #     required: true
-    #     type: string
-    #   is-latest:
-    #     required: false
-    #     type: boolean
-    #     default: false
-    #   pr-number:
-    #     required: false
-    #     type: number
-    #     default: 0
-    #   milestone-number:
-    #     required: false
-    #     type: number
-    #     default: 0
+    inputs:
+      image-name:
+        required: true
+        type: string
+      is-latest:
+        required: false
+        type: boolean
+        default: false
+      pr-number:
+        required: false
+        type: number
+        default: 0
+      milestone-number:
+        required: false
+        type: number
+        default: 0
 
 jobs:
   build-and-push:
