@@ -32,9 +32,6 @@ runs:
   
   steps:
     - uses: actions/checkout@v4
-    - name: echo
-      shell: bash
-      run: echo ${{ github.repository }}
     - name: Build Docker image
       shell: bash
       run: docker build . --file Dockerfile --tag "${{ inputs.image-name }}" --label "runnumber=${GITHUB_RUN_ID}"
