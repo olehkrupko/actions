@@ -58,21 +58,21 @@ runs:
     - name: Push to dev
       shell: bash
       run: |
-        echo '${{ steps.generate-image-id.outputs.IMAGE_ID }}'
+        echo env.IMAGE_ID='${{ env.IMAGE_ID }}'
         # push into dev branch is a release to dev
         if [[ ${{ inputs.is-latest }} == false ]]; then
-          docker tag ${{ inputs.image-name }} ${{ steps.generate-image-id.outputs.IMAGE_ID }}:dev
-          docker push ${{ steps.generate-image-id.outputs.IMAGE_ID }}:dev
-          echo "docker push ${{ steps.generate-image-id.outputs.IMAGE_ID }}:dev"
+          docker tag ${{ inputs.image-name }} ${{ env.IMAGE_ID }}:dev
+          docker push ${{ env.IMAGE_ID }}:dev
+          echo "docker push ${{ env.IMAGE_ID }}:dev"
         fi
     - name: Push to latest
       shell: bash
       run: |
         # push into main branch is a release to latest
         if [[ ${{ inputs.is-latest }} == true ]]; then
-          docker tag ${{ inputs.image-name }} ${{ steps.generate-image-id.outputs.IMAGE_ID }}:latest
-          docker push ${{ steps.generate-image-id.outputs.IMAGE_ID }}:latest
-          echo "docker push ${{ steps.generate-image-id.outputs.IMAGE_ID }}:latest"
+          docker tag ${{ inputs.image-name }} ${{ env.IMAGE_ID }}:latest
+          docker push ${{ env.IMAGE_ID }}:latest
+          echo "docker push ${{ env.IMAGE_ID }}:latest"
         fi
     - name: Push to specific tags
       shell: bash
@@ -80,16 +80,16 @@ runs:
         # each PR has a separate tag: pr-<number>
         if [[ ${{ inputs.pr-number }} != 0 ]]; then
           PR=pr-${{ inputs.pr-number }}
-          docker tag ${{ inputs.image-name }} ${{ steps.generate-image-id.outputs.IMAGE_ID }}:$PR
-          docker push ${{ steps.generate-image-id.outputs.IMAGE_ID }}:$PR
-          echo "docker push ${{ steps.generate-image-id.outputs.IMAGE_ID }}:$PR"
+          docker tag ${{ inputs.image-name }} ${{ env.IMAGE_ID }}:$PR
+          docker push ${{ env.IMAGE_ID }}:$PR
+          echo "docker push ${{ env.IMAGE_ID }}:$PR"
           
           # each PR with a milestone has a separate tag: milestone-<number>
           # is it okay? test it
           if [[ ${{ inputs.milestone-number }} != 0 && ${{ inputs.milestone-number }} != "" ]]; then
             MILESTONE=milestone-${{ inputs.milestone-number }}
-            docker tag ${{ inputs.image-name }} ${{ steps.generate-image-id.outputs.IMAGE_ID }}:$MILESTONE
-            docker push ${{ steps.generate-image-id.outputs.IMAGE_ID }}:$MILESTONE
-            echo "docker push ${{ steps.generate-image-id.outputs.IMAGE_ID }}:$MILESTONE"
+            docker tag ${{ inputs.image-name }} ${{ env.IMAGE_ID }}:$MILESTONE
+            docker push ${{ env.IMAGE_ID }}:$MILESTONE
+            echo "docker push ${{ env.IMAGE_ID }}:$MILESTONE"
           fi
         fi
