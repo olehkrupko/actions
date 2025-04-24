@@ -58,7 +58,6 @@ runs:
     - name: Push to dev
       shell: bash
       run: |
-        echo env.IMAGE_ID='${{ env.IMAGE_ID }}'
         # push into dev branch is a release to dev
         if [[ ${{ inputs.is-latest }} == false ]]; then
           docker tag ${{ inputs.image-name }} ${{ env.IMAGE_ID }}:dev
