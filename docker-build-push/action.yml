@@ -58,6 +58,7 @@ runs:
     - name: Push to dev
       shell: bash
       run: |
+        echo '${{ steps.generate-image-id.outputs.IMAGE_ID }}'
         # push into dev branch is a release to dev
         if [[ ${{ inputs.is-latest }} == false ]]; then
           docker tag ${{ inputs.image-name }} ${{ steps.generate-image-id.outputs.IMAGE_ID }}:dev
