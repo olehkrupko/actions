@@ -31,6 +31,7 @@ runs:
   using: "composite"
   
   steps:
+    - uses: actions/checkout@v4
     - name: log input
       shell: bash
       run: |
@@ -41,7 +42,6 @@ runs:
         echo "milestone-number: '${{ inputs.milestone-number }}'"
         ls -al
         pwd
-    - uses: actions/checkout@v4
     - name: Build Docker image
       shell: bash
       run: docker build . --file Dockerfile --tag "${{ inputs.image-name }}" --label "runnumber=${GITHUB_RUN_ID}"
