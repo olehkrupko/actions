@@ -27,9 +27,8 @@ jobs:
       contents: read
 
     steps:
-      - run: echo "GITHUB_RUN_ID=${GITHUB_RUN_ID}"
-      # - name: test
-      #   run: echo ${{ inputs.image-name }}
+      - name: test
+        run: echo ${{ inputs.image-name }}
       # - uses: actions/checkout@v4
       # - name: Build Docker image
       #   run: docker build . --file Dockerfile --tag "${{ inputs.image-name }}" --label "runnumber=${GITHUB_RUN_ID}"
