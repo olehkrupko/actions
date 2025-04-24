@@ -19,8 +19,13 @@ on:
     #     type: number
     #     default: 0
 
-jobs:
-  echo:
+runs:
+  using: "composite"
+  runs-on: ubuntu-latest
+  permissions:
+    packages: write
+    contents: read
+  steps:
     - run: echo "GITHUB_RUN_ID=${GITHUB_RUN_ID}"
     # - name: test
     #   run: echo ${{ inputs.image-name }}
