@@ -2,10 +2,10 @@ name: Build, Tag & Push Docker image
 
 on:
   workflow_call:
-    inputs:
-      image-name:
-        required: true
-        type: string
+    # inputs:
+    #   image-name:
+    #     required: true
+    #     type: string
     #   is-latest:
     #     required: false
     #     type: boolean
@@ -22,11 +22,13 @@ on:
 runs:
   using: "composite"
   runs-on: ubuntu-latest
+  permissions:
+    packages: write
+    contents: read
   steps:
     - run: echo "GITHUB_RUN_ID=${GITHUB_RUN_ID}"
-      shell: bash
-    - name: test
-      run: echo ${{ inputs.image-name }}
+    # - name: test
+    #   run: echo ${{ inputs.image-name }}
     # - uses: actions/checkout@v4
     # - name: Build Docker image
     #   run: docker build . --file Dockerfile --tag "${{ inputs.image-name }}" --label "runnumber=${GITHUB_RUN_ID}"
