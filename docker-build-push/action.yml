@@ -6,7 +6,7 @@ on:
       image-name:
         required: true
         type: string
-        description: "Name of the Docker image to build and push, obtainable as ${{ github.repository }}"
+        description: "Name of the Docker image to build and push, obtainable as github.repository"
       GITHUB_TOKEN:
         required: true
         type: string
