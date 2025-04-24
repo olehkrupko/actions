@@ -39,6 +39,8 @@ runs:
         echo "is-latest: '${{ inputs.is-latest }}'"
         echo "pr-number: '${{ inputs.pr-number }}'"
         echo "milestone-number: '${{ inputs.milestone-number }}'"
+        ls -al
+        pwd
     - uses: actions/checkout@v4
     - name: Build Docker image
       shell: bash
