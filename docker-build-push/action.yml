@@ -85,7 +85,7 @@ runs:
           
           # each PR with a milestone has a separate tag: milestone-<number>
           # is it okay? test it
-          if [[ ${{ inputs.milestone-number }} != 0 && ${{ inputs.milestone-number }} != "" ]]; then
+          if [[ ${{ inputs.milestone-number }} != "" && ${{ inputs.milestone-number }} != 0 ]]; then
             MILESTONE=milestone-${{ inputs.milestone-number }}
             docker tag ${{ inputs.image-name }} ${{ env.IMAGE_ID }}:$MILESTONE
             docker push ${{ env.IMAGE_ID }}:$MILESTONE
