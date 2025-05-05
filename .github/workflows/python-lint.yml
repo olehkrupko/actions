@@ -7,8 +7,8 @@ jobs:
   starting:
     runs-on: ubuntu-latest
     steps:
-      - name: Starting...
-        run: echo "Starting..."
+      - name: Starting workflow
+        run: echo "Starting workflow..."
 
   flake8-errors:
     runs-on: ubuntu-latest
@@ -83,5 +83,5 @@ jobs:
       - flake8-full
       - black
     steps:
-      - name: Success
-        run: echo "All checks passed!"
+      - name: Success, all checks passed!
+        run: echo "Success, all checks passed!"
