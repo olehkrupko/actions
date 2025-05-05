@@ -1,5 +1,4 @@
 name: Build, Tag & Push Docker image
-run-name: Lint push to ${{ github.ref_name }}
 
 inputs:
   image-name:
