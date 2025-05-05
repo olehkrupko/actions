@@ -1,5 +1,4 @@
 name: Python - Lint
-run-name: Lint push to ${{ github.ref_name }}
 
 on: push
 
