@@ -8,8 +8,6 @@ runs:
   steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-      with:
-        path: ${{github.job}}
     - name: Set up Python 3.11
       uses: actions/setup-python@v5
       with:
