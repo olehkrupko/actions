@@ -4,8 +4,16 @@ on:
   workflow_call:
 
 jobs:
+  starting:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Starting...
+        run: echo "Starting..."
+
   flake8-errors:
     runs-on: ubuntu-latest
+    needs:
+      - starting
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -27,7 +35,9 @@ jobs:
 
   flake8-full:
     runs-on: ubuntu-latest
-    needs: flake8-errors
+    needs:
+      - starting
+      - flake8-errors
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -48,6 +58,8 @@ jobs:
 
   black:
     runs-on: ubuntu-latest
+    needs:
+      - starting
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -62,3 +74,14 @@ jobs:
       - name: Lint with black
         run: |
           black --diff --check black
+
+  success:
+    runs-on: ubuntu-latest
+    needs:
+      - starting
+      - flake8-errors
+      - flake8-full
+      - black
+    steps:
+      - name: Success
+        run: echo "All checks passed!"
