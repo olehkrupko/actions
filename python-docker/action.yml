@@ -1,4 +1,4 @@
-name: Build, Tag & Push Docker image
+name: Python - Build, Tag & Push Docker image
 
 inputs:
   image-name:
