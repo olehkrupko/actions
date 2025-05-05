@@ -1,0 +1,87 @@
+name: Python - Lint code with black and flake8
+
+on:
+  workflow_call:
+
+jobs:
+  start:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Starting workflow
+        run: echo "Starting workflow..."
+
+  black:
+    runs-on: ubuntu-latest
+    needs:
+      - start
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          path: black
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+      - name: Install black
+        run: pip install black==23.10.1
+      - name: Lint with black
+        run: |
+          black --diff --check black
+
+  flake8-errors:
+    runs-on: ubuntu-latest
+    needs:
+      - start
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          path: flake8-errors
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+      - name: Install flake8
+        run: pip install flake8==6.1.0
+      - name: Lint with flake8
+        run: |
+          # stop the build if there are Python syntax errors or undefined names
+          flake8 flake8-errors \
+            --count \
+            --select=E9,F63,F7,F82 \
+            --show-source --statistics
+
+  flake8-full:
+    runs-on: ubuntu-latest
+    needs:
+      - start
+      - flake8-errors
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          path: flake8-full
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+      - name: Install flake8
+        run: pip install flake8==6.1.0
+      - name: Lint with flake8
+        run: |
+          flake8 flake8-full \
+            --count --statistics \
+            --max-line-length=100 \
+            --exclude static_feeds.py
+
+  success:
+    runs-on: ubuntu-latest
+    needs:
+      - start
+      - black
+      - flake8-errors
+      - flake8-full
+    steps:
+      - name: Success, all checks passed!
+        run: echo "Success, all checks passed!"
