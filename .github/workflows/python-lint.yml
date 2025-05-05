@@ -4,35 +4,16 @@ on:
   workflow_call:
 
 jobs:
-  start:
+  starting:
     runs-on: ubuntu-latest
     steps:
-      - name: Starting workflow...
+      - name: Starting workflow
         run: echo "Starting workflow..."
-
-  black:
-    runs-on: ubuntu-latest
-    needs:
-      - starting
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          path: black
-      - name: Set up Python 3.11
-        uses: actions/setup-python@v5
-        with:
-          python-version: 3.11
-      - name: Install black
-        run: pip install black==23.10.1
-      - name: Lint with black
-        run: |
-          black --diff --check black
 
   flake8-errors:
     runs-on: ubuntu-latest
     needs:
-      - start
+      - starting
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -55,7 +36,7 @@ jobs:
   flake8-full:
     runs-on: ubuntu-latest
     needs:
-      - start
+      - starting
       - flake8-errors
     steps:
       - name: Checkout repository
@@ -75,13 +56,32 @@ jobs:
             --max-line-length=100 \
             --exclude static_feeds.py
 
+  black:
+    runs-on: ubuntu-latest
+    needs:
+      - starting
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          path: black
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+      - name: Install black
+        run: pip install black==23.10.1
+      - name: Lint with black
+        run: |
+          black --diff --check black
+
   success:
     runs-on: ubuntu-latest
     needs:
-      - start
-      - black
+      - starting
       - flake8-errors
       - flake8-full
+      - black
     steps:
       - name: Success, all checks passed!
         run: echo "Success, all checks passed!"
