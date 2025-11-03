@@ -1,4 +1,4 @@
-name: Python - Build, Tag & Push Docker image
+name: Docker GHCR - Build, Tag & Push Docker image to ghcr.io
 
 inputs:
   image-name:
@@ -24,6 +24,11 @@ inputs:
     type: number
     default: 0
     description: "Milestone number for tagging"
+  Dockerfile:
+    required: false
+    type: string
+    default: "python.Dockerfile"
+    description: "Path to Dockerfile you want to build"
 
 runs:
   using: "composite"
