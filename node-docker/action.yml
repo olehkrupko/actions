@@ -1,0 +1,94 @@
+name: Node - Build, Tag & Push Docker image
+
+inputs:
+  image-name:
+    required: true
+    type: string
+    description: "Name of the Docker image to build and push, obtainable as github.repository"
+  GITHUB_TOKEN:
+    required: true
+    type: string
+    description: "GitHub token for authentication"
+  is-latest:
+    required: false
+    type: boolean
+    default: false
+    description: "Is this a release to latest?"
+  pr-number:
+    required: false
+    type: number
+    default: 0
+    description: "Pull request number for tagging"
+  milestone-number:
+    required: false
+    type: number
+    default: 0
+    description: "Milestone number for tagging"
+
+runs:
+  using: "composite"
+  
+  steps:
+    - uses: actions/checkout@v4
+    - name: log input
+      shell: bash
+      run: |
+        echo "image-name: '${{ inputs.image-name }}'"
+        # echo "GITHUB_TOKEN: '${{ inputs.GITHUB_TOKEN }}'"
+        echo "is-latest: '${{ inputs.is-latest }}'"
+        echo "pr-number: '${{ inputs.pr-number }}'"
+        echo "milestone-number: '${{ inputs.milestone-number }}'"
+        ls -al
+        pwd
+    - name: Build Docker image
+      shell: bash
+      run: docker build . --file ${GITHUB_ACTION_PATH}/Dockerfile --tag ${{ inputs.image-name }} --label "runnumber=${GITHUB_RUN_ID}"
+    - name: Log in to GitHub Container Registry
+      shell: bash
+      run: echo "${{ inputs.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+    - name: Generate Docker image ID
+      id: generate-image-id
+      shell: bash
+      run: |
+        IMAGE_ID=ghcr.io/${{ inputs.image-name }}
+        # changes all uppercase characters to lowercase:
+        IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+        echo IMAGE_ID=$IMAGE_ID
+        echo "IMAGE_ID=$IMAGE_ID" >> $GITHUB_ENV
+    - name: Push to dev
+      shell: bash
+      run: |
+        # push into dev branch is a release to dev
+        if [[ ${{ inputs.is-latest }} == false ]]; then
+          docker tag ${{ inputs.image-name }} ${{ env.IMAGE_ID }}:dev
+          docker push ${{ env.IMAGE_ID }}:dev
+          echo "docker push ${{ env.IMAGE_ID }}:dev"
+        fi
+    - name: Push to latest
+      shell: bash
+      run: |
+        # push into main branch is a release to latest
+        if [[ ${{ inputs.is-latest }} == true ]]; then
+          docker tag ${{ inputs.image-name }} ${{ env.IMAGE_ID }}:latest
+          docker push ${{ env.IMAGE_ID }}:latest
+          echo "docker push ${{ env.IMAGE_ID }}:latest"
+        fi
+    - name: Push to specific tags
+      shell: bash
+      run: |
+        # each PR has a separate tag: pr-<number>
+        if [[ ${{ inputs.pr-number }} != 0 ]]; then
+          PR=pr-${{ inputs.pr-number }}
+          docker tag ${{ inputs.image-name }} ${{ env.IMAGE_ID }}:$PR
+          docker push ${{ env.IMAGE_ID }}:$PR
+          echo "docker push ${{ env.IMAGE_ID }}:$PR"
+          
+          # each PR with a milestone has a separate tag: milestone-<number>
+          # is it okay? test it
+          if "[[ ${{ inputs.milestone-number }}" != "" && "${{ inputs.milestone-number }}" != "0" ]]; then
+            MILESTONE=milestone-${{ inputs.milestone-number }}
+            docker tag ${{ inputs.image-name }} ${{ env.IMAGE_ID }}:$MILESTONE
+            docker push ${{ env.IMAGE_ID }}:$MILESTONE
+            echo "docker push ${{ env.IMAGE_ID }}:$MILESTONE"
+          fi
+        fi
