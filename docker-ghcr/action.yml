@@ -27,7 +27,7 @@ inputs:
   Dockerfile:
     required: false
     type: string
-    default: "python.Dockerfile"
+    default: "Dockerfile.python"
     description: "Path to Dockerfile you want to build"
 
 runs:
