@@ -1,4 +1,4 @@
-name: Python - Build, Tag & Push Docker image
+name: Docker GHCR - Build, Tag & Push Docker image to ghcr.io
 
 inputs:
   image-name:
@@ -24,6 +24,11 @@ inputs:
     type: number
     default: 0
     description: "Milestone number for tagging"
+  Dockerfile:
+    required: false
+    type: string
+    default: "Dockerfile.python"
+    description: "Path to Dockerfile you want to build"
 
 runs:
   using: "composite"
@@ -42,7 +47,7 @@ runs:
         pwd
     - name: Build Docker image
       shell: bash
-      run: docker build . --file ${GITHUB_ACTION_PATH}/Dockerfile --tag ${{ inputs.image-name }} --label "runnumber=${GITHUB_RUN_ID}"
+      run: docker build . --file ${GITHUB_ACTION_PATH}/${{ inputs.Dockerfile }} --tag ${{ inputs.image-name }} --label "runnumber=${GITHUB_RUN_ID}"
     - name: Log in to GitHub Container Registry
       shell: bash
       run: echo "${{ inputs.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
