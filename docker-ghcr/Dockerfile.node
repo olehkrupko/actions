@@ -8,8 +8,10 @@ RUN npm install
 
 COPY . /app
 
-ARG REACT_APP_SWAMP_API
-ENV REACT_APP_SWAMP_API=$REACT_APP_SWAMP_API
+ARG VITE_SWAMPAPI
+ENV VITE_SWAMPAPI=$VITE_SWAMPAPI
+
+RUN npm run build
 
 # install:
 # docker exec -it swamp-subscriptions npm install --save @sentry/react
