@@ -11,6 +11,8 @@ COPY . /app
 ARG VITE_SWAMPAPI
 ENV VITE_SWAMPAPI=$VITE_SWAMPAPI
 
+RUN npm run build
+
 # install:
 # docker exec -it swamp-subscriptions npm install --save @sentry/react
 # update:
